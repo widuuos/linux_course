@@ -1,6 +1,20 @@
-###运行级别
+###运行级别和启动流程
 
->为什么说这个呢？因为懂了这个你对一些基础的，你对以后的开机，重启，程序的加载都会比较深的了解！Linux的用户级别有这几种
+>只有了解linux的启动流程才能更好的去优化和配置Linux,譬如说一台服务器我为什么要保证3，5启动软件即可，是怎么启动的呢？
+
+1.	bios找到mbr主引导区，这个东西才512字节，深入的可以查询一下
+2.	进入grub界面找启动内核
+3.	读取kernel内核文件 /boot/vmlinuz-*
+4.	读取init的镜像文件 /boot/initrd-*
+5.	init读取/etc/inittab
+6.	读取启动级别(id:3:initdefault)
+7.	读取/etc/rc.d/rc.sysinit,完成时间、主机名称，还要分区表/etc/fstab
+8.	读取/etc/rc.d/rc脚本，通过脚本转换3级别，然后启动/etc/rc.d/rc3.d/下所有S来头的服务，不启动目录下K开头的服务
+9.	进入登录界面
+
+---
+
+#####我们服务器设置的一般控制inittab来控制是图形界面还是终端 sudo init 0 关机
 
 	>vim /etc/inittab	#init启动时候加载的启动级别
 
@@ -14,18 +28,47 @@
 
 >当你是终端的时候你会发现你登录的是3级别，如果是X11图形界面的时候是5,可以修改`id:3:initdefault`,来修改启动级别
 
->其中譬如我们开机启动mysql,我们设置如下
+>如何设置开机启动和开机启动的原理
 
+>我们如上还是终端启动，我们就进入/etc/rc.d/rc3.d 我们看到S开头和K开头，你可以理解成start和kill s开头的都启动K开头的都是不启动 ubuntu在 /etc/rc3.d/
+
+	#centos设置开机启动
 	>chkconfig mysql on				#设置开机启动
 	>chkconfig --list|grep mysql 	#查看哪些启动级别,发现除了0，1，6关闭其他都开启
 	>cd /etc/rc.d && ls -l			#rcx.d是启动级别
 	>cd rc3.d && ll|grep mysql		#显示如下，当然你进入2，4，5也是一样的，这就是说为什么服务器要保证开机3，5启动
 	lrwxrwxrwx  1 root root 16 3月  14 19:22 S64mysqld -> ../init.d/mysqld
- 					
+
+	#ubuntu设置开机启动
+	>sudo apt-get install dialog rcconf     #安装rcconf
+	>sudo rcconf                            #出现图形界面可以设置
+
+>一般我们使用apt-get或者yum安装的，也就是仓库源安装的都可以使用`service XXX start`,其实这种东西存储在/etc/init.d/文件夹下，你可以自己写脚本，放到/etc/init.d/使用`chmod a+x xxx`给权限，然后`service xxx start`启动,譬如我们二进制安装的nginx，然后自己手动写个nginx启动脚本。
+	
+![rcconf](http://widuu.u.qiniudn.com/linux/rcconf.png)					
+
+---
 
 ###压缩与解压
 
-####gz压缩包
+>这个我们需要会几个常用的压缩包的解压和压缩，解压是因为万一你有二进制包要安装，你带会解压吧！压缩-你要备份一个网站不可能一个文件一个文件备份吧~所以学习压缩，这里边我讲下常用的tar tar.gz常见，.tar.bz2我记得php下载官网好像就有这个格式，为什么还学zip，兄弟，因为windows平台对zip支持很好，万一你要下载网站日志到windows上分析呢~是吧~ widuu建议这几个必会
+
+####tar压缩包
+
+	>tar cf file.tar file
+	#联想记忆
+ 	#c create
+	#f file 
+
+	>tar xf file.tar -C /data
+	#x extract 记住x
+	#-C 这是解压到哪里去
+
+	#查看压缩包
+	>tar tf file.tar.gz
+
+
+####tar.gz压缩包
 
 	>tar czf file.tar.gz file
 	#联想记忆
@@ -62,10 +105,9 @@
 
 ####2. 修改网络配置文件
 
-	#centos位置
+>现在用的最多的应该就是centos和ubuntu这两个吧，我就拿这两个做讲解，这个拖拖的你带会配置万一让你修改dhcp到static，我擦 修改错了，这个除了机房能控制，你购买的代理商都很难再弄上了~~~
+	#centos配置
 	>cd /etc/sysconfig/network-scripts/
-	#ubuntu
-	>vim /etc/network/interfaces
 
 	#centos配置
 
@@ -88,7 +130,23 @@
 		
 	nameserver 202.102.224.68
 	nameserver 8.8.8.8
+	
+	#ubuntu 配置
+	>vim /etc/network/interfaces
+	auto eth0
+	iface eth0 inet static
+	address 192.168.1.108
+	netmask 255.255.255.0
+	gateway 192.168.1.1
 
+	#修改dns
+	vim /etc/resolv.conf
+	nameserver 8.8.8.8
+
+	#重启生效
+	/etc/init.d/networking restart
+	
+	
 ###防火墙设置
 
 ####iptables
@@ -355,8 +413,6 @@
 1. `ls -l`
 2. `chmod a+x xxx.sh`
 3. `sudo /usr/sbin/useradd widuu`
-4. 
-
 
 ###文件权限
 

@@ -57,3 +57,9 @@ linux基础教程-再谈脚本编程(1)
 	>sourse .profile
 	
 
+#####文件查找
+
+>我们一般用whereis或者locate是查找本地的文件库，find 强大但是慢
+
+
+

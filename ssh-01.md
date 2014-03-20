@@ -13,14 +13,34 @@ linux基础教程-再谈脚本编程(1)
 	echo "hello word"
 	>chmod a+x hello.sh
 	>./hello.sh           #这时候就会出现hello word了
+
+#####变量
 	
-#####printf
+>变量都是以下划线或者字母开头的，我们尝试一下
+
+	>username=widuu
+	>echo $username
+	#widuu
+
+	>xiaolvge="$username xiaowei"
+	>echo $xiaolvge
+	#widuu xiaowei 字符串可以直接拼接
+	
+#####输出
+	
+	#输出用 -n是省略换行符\n
+	>echo -n "hello word"
 	
 	#printf是模仿c语言中的printf
 	>printf "your website address %s\n" http://www.widuu.com
 	>your website address http://www.widuu.com  #输出
 
 #####输入输出重定向
+
+	#cat从输入流获取内容
+	>cat
+	>my name is widuu
+	#输出my name is widuu
 
 	#输出重定向
 	>ls -l > text.txt #改变输出到text.txt
@@ -57,9 +77,12 @@ linux基础教程-再谈脚本编程(1)
 	>sourse .profile
 	
 
+<<<<<<< HEAD
 #####文件查找
 
 >我们一般用whereis或者locate是查找本地的文件库，find 强大但是慢
 
 
+=======
+>>>>>>> 11225ab0b5fe7dc89a61257303fbda277cb8d02f
 

@@ -60,7 +60,7 @@ sed
 
 ###举个例子
 
->假设我要写一个七牛云存储备份的脚本，也可以供大家使用，里边有个配置文件，是个json的，我希望大家自己配置自己的文件怎么做呢？
+>假设我要写一个七牛云存储备份的脚本，也可以供大家使用，里边有个配置文件，我希望手动输入来配置这个配置文件
 
 	{
 	    "access_key": "Please apply your access key here",
@@ -80,7 +80,7 @@ sed
 
 ![sed9](http://widuu.u.qiniudn.com/linux/sed/sed9.png)
 
-	#我们可以这样写，当然是做联系用，不能实际用哈，当我以后将shell编程的时候，会完善这个
+	#我们可以这样写，当然是做练习用，不能实际用哈，当我以后将shell编程的时候，会完善这个
 	#!/bin/bash
 	QPATH=/root/qbox.conf
 	read -p "write your access_key:" access

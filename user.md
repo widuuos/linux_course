@@ -179,7 +179,3 @@
 	>gpasswd -A xiaowei widuu #xiaowei加入widuu群组
 	>gpasswd widuu            #设置口令 
 	>gpasswd widuu xiaowei1   #讲xiaowei1加入群组
-	
-
-
-

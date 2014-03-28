@@ -208,13 +208,13 @@
 	#状态连接				
 	iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
 	#允许80端口
-	iptables -A INPUT -p tcp --dport -p 80 -j ACCEPT 
+	iptables -A INPUT -p tcp --dport  80 -j ACCEPT 
 	#允许ssh
-	iptables -A INPUT -p tcp --dport -p 22 -s x.x.x.x -j ACCEPT
+	iptables -A INPUT -p tcp --dport  22 -s x.x.x.x -j ACCEPT
 	#允许mysql
-	iptables -A INPUT -p tcp --dport -p 3306 -j ACCEPT
+	iptables -A INPUT -p tcp --dport  3306 -j ACCEPT
 	#允许ftp
-	iptables -A INPUT -p tcp --dport -p 21 -j ACCEPT
+	iptables -A INPUT -p tcp --dport  21 -j ACCEPT
  	#允许邮件服务器
 	iptables -A INPUT -p tcp --dport 110 -j ACCEPT
 	iptables -A INPUT -p tcp --dport 25 -j ACCEPT
